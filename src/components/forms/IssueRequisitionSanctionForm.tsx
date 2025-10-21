@@ -1,12 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { getStore } from "@/redux/actions/storeActions";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 
 export default function IssueRequisitionSanctionForm() {
   const [activeTab, setActiveTab] = useState("items");
+  const [selectedStore, setSelectedStore] = useState<string | null>(null);
+  const dispatch: AppDispatch = useDispatch();
+
+  const { stores } = useSelector((state: RootState) => state?.store);
+
+  useEffect(() => {
+    dispatch(getStore());
+  }, [dispatch]);
 
   return (
     <div className="bg-white p-8 rounded-lg shadow-md">
@@ -16,9 +27,14 @@ export default function IssueRequisitionSanctionForm() {
 
       {/* Bagian Header Form */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 mb-8">
-        <Select label="Current Store:" id="current-store">
-          <option>GUDANG</option>
-        </Select>
+        <Select
+          label="Current Store: *"
+          id="store"
+          options={stores}
+          value={selectedStore}
+          onChange={setSelectedStore}
+          placeholder="select a store"
+        />
         <Input label="Sanctioned By: *" id="sanctioned-by" type="text" />
         <Input
           label="Date of Sanction: *"

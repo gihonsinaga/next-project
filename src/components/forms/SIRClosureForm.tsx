@@ -1,12 +1,23 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { getStore } from "@/redux/actions/storeActions";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
-import { useState } from "react";
 
 export default function SIRClosureForm() {
   const [activeTab, setActiveTab] = useState("items");
+  const [selectedStore, setSelectedStore] = useState<string | null>(null);
+  const dispatch: AppDispatch = useDispatch();
+
+  const { stores } = useSelector((state: RootState) => state.store);
+
+  useEffect(() => {
+    dispatch(getStore());
+  }, [dispatch]);
 
   return (
     <div className="bg-white p-8 rounded-lg shadow-md">
@@ -15,9 +26,14 @@ export default function SIRClosureForm() {
       {/* Bagian Header Form */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="space-y-4">
-          <Select label="Current Store:" id="current-store">
-            <option>GUDANG</option>
-          </Select>
+          <Select
+            label="Store: *"
+            id="store"
+            options={stores}
+            value={selectedStore}
+            onChange={setSelectedStore}
+            placeholder="select a store"
+          />
           <Input label="SIR No: *" id="sir-no" type="text" />
           <Input
             label="Date:"
@@ -197,9 +213,14 @@ export default function SIRClosureForm() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="space-y-4">
           <div className="space-y-4">
-            <Select label="Status Changed By: *" id="status-changed-by">
-              <option>Select User</option>
-            </Select>
+            <Select
+              label="Status Changed by: *"
+              id="store"
+              options={stores}
+              value={selectedStore}
+              onChange={setSelectedStore}
+              placeholder="select a store"
+            />
             <Input
               label="Status Change Date:"
               id="status-change-date"
