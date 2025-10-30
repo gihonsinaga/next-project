@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 // Fungsi middleware
 export function middleware(request: NextRequest) {
   const accessToken = request.cookies.get("accessToken")?.value;
+  console.log("accessToken", accessToken);
 
   const { pathname } = request.nextUrl;
 
